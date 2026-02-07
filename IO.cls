@@ -7,7 +7,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Attribute VB_Ext_KEY = "Rubberduck" ,"Predeclared Class Module"
 '@ModuleDescription "FileSystemObject Wrapper Class"
 '@Folder("RyoYoshizawa.FileSystem")
 '@PredeclaredId
@@ -107,7 +106,7 @@ Public Function GetDirectoryFiles(ByVal FolderPath As String) As Collection
 End Function
 
 '@Description "Returns the drive name of a specified path."
-Public Function GetDirectorySize(ByVal Path As String) As Long
+Public Function GetDirectorySize(ByVal Path As String) As LongLong
     If Not Me.ExistsDirectory(Path) Then
         GetDirectorySize = -1
         Exit Function
@@ -140,7 +139,7 @@ Public Function GetFileName(ByVal Path As String) As String
 End Function
 
 '@Description "Returns the size, in bytes, of a specified file."
-Public Function GetFileSize(ByVal Path As String) As Long
+Public Function GetFileSize(ByVal Path As String) As LongLong
     If Not Me.ExistsFile(Path) Then
         GetFileSize = -1
         Exit Function
@@ -169,7 +168,7 @@ End Function
 
 '@Description "Returns the temporary folder specified."
 Public Function GetTempDirectoryName() As String
-    GetTempDirectory = fs.GetSpecialFolder(2)
+    GetTempDirectoryName = fs.GetSpecialFolder(2)
 End Function
 
 '@Description "Returns a randomly generated temporary file or folder."
