@@ -12,6 +12,7 @@ Attribute VB_Exposed = False
 '@PredeclaredId
 Option Explicit
 
+Private Const IO_DEBUG As Boolean = False
 Private Function fs() As Object
     Set fs = CreateObject("Scripting.FileSystemObject")
 End Function
@@ -28,6 +29,7 @@ Public Function CopyDirectory(ByVal Source As String, ByVal Destination As Strin
     CopyDirectory = True
     Exit Function
 Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] IO.CopyDirectory:" & err.Description
     CopyDirectory = False
 End Function
 
@@ -38,6 +40,7 @@ Public Function CopyFile(ByVal Source As String, ByVal Destination As String, Op
     CopyFile = True
     Exit Function
 Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.CopyDirectory:" & err.Description
     CopyFile = False
 End Function
 
@@ -48,6 +51,7 @@ Public Function CreateDirectory(ByVal DirectoryName As String) As Boolean
     CreateDirectory = True
     Exit Function
 Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.CreateDirectory:" & err.Description
     CreateDirectory = False
 End Function
 
@@ -58,6 +62,7 @@ Public Function DeleteDirectory(ByVal DirectorySpec As String, Optional Force As
     DeleteDirectory = True
     Exit Function
 Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.DeleteDirectory:" & err.Description
     DeleteDirectory = False
 End Function
 
@@ -68,6 +73,7 @@ Public Function DeleteFile(ByVal FileSpec As String, Optional Force As Boolean =
     DeleteFile = True
     Exit Function
 Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.DeleteFile:" & err.Description
     DeleteFile = False
 End Function
 
@@ -107,12 +113,16 @@ End Function
 
 '@Description "Returns the drive name of a specified path."
 Public Function GetDirectorySize(ByVal Path As String) As LongLong
+    On Error GoTo Catch
     If Not Me.ExistsDirectory(Path) Then
         GetDirectorySize = -1
         Exit Function
     End If
     Dim dir As Object: Set dir = fs.GetFolder(Path)
     GetDirectorySize = dir.Size
+Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.GetDirectorySize:" & err.Description
+    GetDirectorySize = -1
 End Function
 
 '@Description "Returns the drive name of a specified path."
@@ -140,12 +150,16 @@ End Function
 
 '@Description "Returns the size, in bytes, of a specified file."
 Public Function GetFileSize(ByVal Path As String) As LongLong
+    On Error GoTo Catch
     If Not Me.ExistsFile(Path) Then
         GetFileSize = -1
         Exit Function
     End If
     Dim file As Object: Set file = fs.GetFile(Path)
     GetFileSize = file.Size
+Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.GetFileSize:" & err.Description
+    GetFileSize = -1
 End Function
 
 '@Description "Returns the name of the parent directory of the last component in a specified path."
@@ -183,6 +197,7 @@ Public Function MoveDirectory(ByVal Source As String, ByVal Destination As Strin
     MoveDirectory = True
     Exit Function
 Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.MoveDirectory:" & err.Description
     MoveDirectory = False
 End Function
 
@@ -193,5 +208,6 @@ Public Function MoveFile(ByVal Source As String, ByVal Destination As String) As
     MoveFile = True
     Exit Function
 Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.MoveFile:" & err.Description
     MoveFile = False
 End Function

@@ -10,6 +10,7 @@ Attribute VB_Exposed = False
 '@Folder("RyoYoshizawa.FileSystem")
 Option Explicit
 
+Private Const Stream_DEBUG As Boolean = False
 Private stream As Object
 Private utf8NoBOM As Boolean
 
@@ -131,6 +132,7 @@ Public Function Cancel() As Boolean
     Cancel = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.Cancel:" & err.Description
     Cancel = False
 End Function
 
@@ -140,6 +142,7 @@ Public Function CloseStream() As Boolean
     CloseStream = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.CloseStream:" & err.Description
     CloseStream = False
 End Function
 
@@ -149,6 +152,7 @@ Public Function CopyTo(ByRef DestStream As Object, Optional NumChars As Integer 
     CopyTo = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.CopyTo:" & err.Description
     CopyTo = False
 End Function
 
@@ -158,6 +162,7 @@ Public Function Flush() As Boolean
     Flush = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.Flush:" & err.Description
     Flush = False
 End Function
 
@@ -167,6 +172,7 @@ Public Function LoadFromFile(ByVal FileName As String) As Boolean
     LoadFromFile = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.LoadFromFile:" & err.Description
     LoadFromFile = False
 End Function
 
@@ -181,6 +187,7 @@ Public Function OpenStream( _
     OpenStream = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.OpenStream:" & err.Description
     OpenStream = False
 End Function
 
@@ -216,6 +223,7 @@ Public Function SaveToFile( _
     SaveToFile = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.SaveToFile:" & err.Description
     SaveToFile = False
 End Function
 
@@ -249,6 +257,7 @@ Function SetEOS() As Boolean
     SetEOS = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.SetEOS:" & err.Description
     SetEOS = False
 End Function
 
@@ -258,6 +267,7 @@ Public Function SkipLine() As Boolean
     SkipLine = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.SkipLine:" & err.Description
     SkipLine = False
 End Function
 
@@ -267,6 +277,7 @@ Public Function WriteBinary(ByVal Buffer As Variant) As Boolean
     WriteBinary = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.WriteBinary:" & err.Description
     WriteBinary = False
 End Function
 
@@ -279,6 +290,7 @@ Public Function WriteText( _
     WriteText = True
     Exit Function
 Catch:
+    If Stream_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] Stream.WriteText:" & err.Description
     WriteText = False
 End Function
 
