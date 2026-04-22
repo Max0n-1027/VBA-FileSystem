@@ -18,8 +18,11 @@ Private Function fs() As Object
 End Function
 
 '@Description "Appends a name to an existing path."
-Public Function BuildPath(ByVal Path As String, ByVal Name As String) As String
-    BuildPath = fs.BuildPath(Path, Name)
+Public Function BuildPath(ByVal Path As String, ParamArray Childs() As Variant) As String
+    Dim child: For Each child In Childs
+        Path = fs.BuildPath(Path, ParseVal(child))
+    Next
+    BuildPath = Path
 End Function
 
 '@Description "Copies one or more directories from one location to another."
@@ -210,4 +213,24 @@ Public Function MoveFile(ByVal Source As String, ByVal Destination As String) As
 Catch:
     If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.MoveFile:" & err.Description
     MoveFile = False
+End Function
+
+Private Function ParseVal(ByVal inputVar As Variant) As String
+    On Error GoTo ErrorHandler
+
+    If IsNull(inputVar) Or IsEmpty(inputVar) Then
+        ParseVal = ""
+        Exit Function
+    End If
+
+    If VarType(inputVar) = vbObject Then
+        ParseVal = TypeName(inputVar)
+        Exit Function
+    End If
+
+    ParseVal = CStr(inputVar)
+    Exit Function
+
+ErrorHandler:
+    ParseVal = "[Error parsing Variant]"
 End Function
