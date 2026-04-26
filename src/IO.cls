@@ -13,6 +13,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Const IO_DEBUG As Boolean = False
+
 Private Function fs() As Object
     Set fs = CreateObject("Scripting.FileSystemObject")
 End Function
@@ -23,6 +24,13 @@ Public Function BuildPath(ByVal Path As String, ParamArray Childs() As Variant) 
         Path = fs.BuildPath(Path, ParseVal(child))
     Next
     BuildPath = Path
+End Function
+
+Public Function ChangeExtension(ByVal Path As String, ByVal Extension As String) As String
+    Dim Directory As String: Directory = fs.GetParentFolderName(Path)
+    Dim FileName As String: FileName = fs.GetBaseName(Path)
+    If Left$(Extension, 1) <> "." Then Extension = "." & Extension
+    ChangeExtension = fs.BuildPath(Directory, FileName & Extension)
 End Function
 
 '@Description "Copies one or more directories from one location to another."
@@ -48,9 +56,32 @@ Catch:
 End Function
 
 '@Description "Creates a new directory."
-Public Function CreateDirectory(ByVal DirectoryName As String) As Boolean
+Public Function CreateDirectory(ByVal DirectoryName As String, Optional ByVal Recursive As Boolean = False) As Boolean
     On Error GoTo Catch
-    fs.CreateFolder DirectoryName
+    If fs.FolderExists(DirectoryName) Then
+        CreateDirectory = True
+        Exit Function
+    End If
+    If Not Recursive Then
+        fs.CreateFolder DirectoryName
+        CreateDirectory = True
+        Exit Function
+    End If
+    
+    Dim dirs() As String
+    dirs = Split(Expression:=fs.GetAbsolutePathName(DirectoryName), Delimiter:="\", Compare:=vbBinaryCompare)
+    Dim dir As String
+    Dim name: For Each name In dirs
+        If dir = "" Then
+            dir = name & "\"
+        Else
+            dir = fs.BuildPath(dir, name)
+            If Not IO.CreateDirectory(dir) Then
+                CreateDirectory = False
+                Exit Function
+            End If
+        End If
+    Next
     CreateDirectory = True
     Exit Function
 Catch:
@@ -234,3 +265,4 @@ Private Function ParseVal(ByVal inputVar As Variant) As String
 ErrorHandler:
     ParseVal = "[Error parsing Variant]"
 End Function
+
