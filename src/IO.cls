@@ -26,6 +26,19 @@ Public Function BuildPath(ByVal Path As String, ParamArray Childs() As Variant) 
     BuildPath = Path
 End Function
 
+Public Function ChangeCurrentDirectory(ByVal Path As String) As Boolean
+    If Not fs.FolderExists(Path) Then
+        ChangeCurrentDirectory = False
+        Exit Function
+    End If
+    VBA.ChDir (Path)
+    ChangeCurrentDirectory = True
+    Exit Function
+Catch:
+    If IO_DEBUG Then Debug.Print "[" & Format$(Date, "yyyy/mm/dd hh:mm:ss") & "] IO.ChangeCurrentDirectory:" & err.Description
+    ChangeCurrentDirectory = False
+End Function
+
 Public Function ChangeExtension(ByVal Path As String, ByVal Extension As String) As String
     Dim Directory As String: Directory = fs.GetParentFolderName(Path)
     Dim FileName As String: FileName = fs.GetBaseName(Path)
@@ -134,6 +147,10 @@ End Function
 '@Description "Returns the base name of a specified file or directory."
 Public Function GetBaseName(ByVal Path As String) As String
     GetBaseName = fs.GetBaseName(Path)
+End Function
+
+Public Function GetCurrentDirectory() As String
+    GetCurrentDirectory = VBA.CurDir$
 End Function
 
 '@Description "Returns a collection of all the file names in a specified directory."
