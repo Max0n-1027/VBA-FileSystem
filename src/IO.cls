@@ -31,7 +31,7 @@ Public Function ChangeCurrentDirectory(ByVal Path As String) As Boolean
         ChangeCurrentDirectory = False
         Exit Function
     End If
-    VBA.ChDir (Path)
+    VBA.ChDir Path
     ChangeCurrentDirectory = True
     Exit Function
 Catch:
@@ -261,6 +261,22 @@ Public Function MoveFile(ByVal Source As String, ByVal Destination As String) As
 Catch:
     If IO_DEBUG Then Debug.Print "[" & Format$(Now, "yyyy/mm/dd hh:mm:ss") & "] IO.MoveFile:" & err.Description
     MoveFile = False
+End Function
+
+Function IsDirectoryWritable(ByVal Path As String) As Boolean
+    On Error GoTo Catch
+    If Not fs.FolderExists(Path) Then
+        IsDirectoryWritable = False
+        Exit Function
+    End If
+    
+    Dim temp As String: temp = fs.BuildPath(Path, fs.GetTempName)
+    fs.CreateTextFile temp
+    fs.DeleteFile temp
+    IsDirectoryWritable = True
+    Exit Function
+Catch:
+    IsDirectoryWritable = False
 End Function
 
 Private Function ParseVal(ByVal inputVar As Variant) As String

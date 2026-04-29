@@ -11,7 +11,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Const Stream_DEBUG As Boolean = False
-Private stream As Object
+Private Stream As Object
 Private utf8NoBOM As Boolean
 
 Public Enum adCharSetEnum
@@ -73,62 +73,62 @@ Public Enum adStreamOpenOptionsEnum
 End Enum
 
 Public Property Get Charset() As String
-    Charset = stream.Charset
+    Charset = Stream.Charset
 End Property
 
 Public Property Get DataType() As adStreamTypeEnum
-    DataType = stream.Type
+    DataType = Stream.Type
 End Property
 
 Public Property Let DataType(ByVal dType As adStreamTypeEnum)
-    stream.Type = dType
+    Stream.Type = dType
 End Property
 
 Public Function EOS() As Boolean
-    EOS = stream.EOS
+    EOS = Stream.EOS
 End Function
 
 Public Property Get LineSeparator() As adLineSeparatorsEnum
-    LineSeparator = stream.LineSeparator
+    LineSeparator = Stream.LineSeparator
 End Property
 
 Public Property Let LineSeparator(ByVal SeparatorType As adLineSeparatorsEnum)
-    stream.LineSeparator = SeparatorType
+    Stream.LineSeparator = SeparatorType
 End Property
 
 Public Property Get Mode() As adConnectModeEnum
-    Mode = stream.Mode
+    Mode = Stream.Mode
 End Property
 
 Public Property Let Mode(ByVal Mode As adConnectModeEnum)
-    stream.Mode = Mode
+    Stream.Mode = Mode
 End Property
 
 Public Property Get Position() As Long
-    Position = stream.Position
+    Position = Stream.Position
 End Property
 
 Public Property Let Position(ByVal pos As Long)
-    stream.Position = pos
+    Stream.Position = pos
 End Property
 
 Public Property Get Size() As Long
-    Size = stream.Size
+    Size = Stream.Size
 End Property
 
 Private Sub Class_Initialize()
-    Set stream = CreateObject("ADODB.Stream")
+    Set Stream = CreateObject("ADODB.Stream")
 End Sub
 
 Private Sub Class_Terminate()
-    If stream.State <> adStateEnum.adStateClosed Then
-        stream.Close
+    If Stream.State <> adStateEnum.adStateClosed Then
+        Stream.Close
     End If
 End Sub
 
 Public Function Cancel() As Boolean
     On Error GoTo Catch
-    stream.Cancel
+    Stream.Cancel
     Cancel = True
     Exit Function
 Catch:
@@ -138,7 +138,7 @@ End Function
 
 Public Function CloseStream() As Boolean
     On Error GoTo Catch
-    stream.Close
+    Stream.Close
     CloseStream = True
     Exit Function
 Catch:
@@ -148,7 +148,7 @@ End Function
 
 Public Function CopyTo(ByRef DestStream As Object, Optional NumChars As Integer = -1)
     On Error GoTo Catch
-    stream.CopyTo DestStream, NumChars
+    Stream.CopyTo DestStream, NumChars
     CopyTo = True
     Exit Function
 Catch:
@@ -158,7 +158,7 @@ End Function
 
 Public Function Flush() As Boolean
     On Error GoTo Catch
-    stream.Flush
+    Stream.Flush
     Flush = True
     Exit Function
 Catch:
@@ -168,7 +168,7 @@ End Function
 
 Public Function LoadFromFile(ByVal FileName As String) As Boolean
     On Error GoTo Catch
-    stream.LoadFromFile FileName
+    Stream.LoadFromFile FileName
     LoadFromFile = True
     Exit Function
 Catch:
@@ -183,7 +183,7 @@ Public Function OpenStream( _
        Optional ByVal UserName As String, _
        Optional ByVal Password As String) As Boolean
     On Error GoTo Catch
-    stream.Open Source, Mode, OpenOptions, UserName, Password
+    Stream.Open Source, Mode, OpenOptions, UserName, Password
     OpenStream = True
     Exit Function
 Catch:
@@ -192,11 +192,11 @@ Catch:
 End Function
 
 Public Function ReadBinary(Optional NumBytes As Long = -1) As Variant
-    ReadBinary = stream.Read(NumBytes)
+    ReadBinary = Stream.Read(NumBytes)
 End Function
 
 Public Function ReadText(Optional ByVal NumChars As Long = -1) As String
-    ReadText = stream.ReadText(NumChars)
+    ReadText = Stream.ReadText(NumChars)
 End Function
 
 Public Function SaveToFile( _
@@ -204,7 +204,7 @@ Public Function SaveToFile( _
        Optional ByVal SaveOptions As adSaveOptionsEnum = adSaveOptionsEnum.adSaveCreateNotExist _
        ) As Boolean
     On Error GoTo Catch
-    stream.SaveToFile FileName, SaveOptions
+    Stream.SaveToFile FileName, SaveOptions
     If utf8NoBOM Then
         Dim bt As Variant
         Dim st As Object: Set st = CreateObject("ADODB.Stream")
@@ -230,19 +230,19 @@ End Function
 Public Function SetCharset(ByVal char As adCharSetEnum)
     Select Case char
     Case adCharSetEnum.ASCII
-        stream.Charset = "ascii"
+        Stream.Charset = "ascii"
     Case adCharSetEnum.ISO_8859_1
-        stream.Charset = "iso-8859-1"
+        Stream.Charset = "iso-8859-1"
     Case adCharSetEnum.Shift_Jis
-        stream.Charset = "shift_jis"
+        Stream.Charset = "shift_jis"
     Case adCharSetEnum.UTF_7
-        stream.Charset = "utf-7"
+        Stream.Charset = "utf-7"
     Case adCharSetEnum.UTF_8, adCharSetEnum.UTF_8n
-        stream.Charset = "utf-8"
+        Stream.Charset = "utf-8"
     Case adCharSetEnum.UTF_16LE
-        stream.Charset = "unicode"
+        Stream.Charset = "unicode"
     Case adCharSetEnum.UTF_16BE
-        stream.Charset = "unicodeFFFE"
+        Stream.Charset = "unicodeFFFE"
     End Select
     If char = UTF_8n Then
         utf8NoBOM = True
@@ -253,7 +253,7 @@ End Function
 
 Function SetEOS() As Boolean
     On Error GoTo Catch
-    stream.SetEOS
+    Stream.SetEOS
     SetEOS = True
     Exit Function
 Catch:
@@ -263,7 +263,7 @@ End Function
 
 Public Function SkipLine() As Boolean
     On Error GoTo Catch
-    stream.SkipLine
+    Stream.SkipLine
     SkipLine = True
     Exit Function
 Catch:
@@ -273,7 +273,7 @@ End Function
 
 Public Function WriteBinary(ByVal Buffer As Variant) As Boolean
     On Error GoTo Catch
-    stream.Write Buffer
+    Stream.Write Buffer
     WriteBinary = True
     Exit Function
 Catch:
@@ -286,7 +286,7 @@ Public Function WriteText( _
        Optional Options As adStreamWriteEnum = adStreamWriteEnum.adWriteChar _
        ) As Boolean
     On Error GoTo Catch
-    stream.WriteText Data, Options
+    Stream.WriteText Data, Options
     WriteText = True
     Exit Function
 Catch:
